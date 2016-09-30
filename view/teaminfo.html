@@ -1,0 +1,12 @@
+<!-- My Navigation Directive -->
+<navigation></navigation>
+
+<div class="container">
+    <h2 align="center">Team info<h2>
+
+<!-- Iterate the Team Players data -->
+<div ng-repeat="team in teamDetails">
+<!-- MyCardImage Directive for display Card image and players details -->
+<my-card-image team="team" index="$index"></my-card-image>
+</div>
+</div>

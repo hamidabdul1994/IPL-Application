@@ -1,0 +1,25 @@
+<!-- It ImageCard Divid's into different grids -->
+<div class="col-lg-4 col-sm-6 col-md-4">
+    <div class="w3-card-4" style="width:auto; margin:10px; height:auto">
+        <div class="w3-container md-padding" align="center" id="a{{index}}" ng-cloak>
+
+            <!-- Card Hear infomation -->
+            <header class="w3-container w3-green">
+                <center>
+                    <h3>{{team.playerName}}</h3></center>
+            </header>
+            <!-- Modal Alert display div and image display-->
+            <div class="dialog-demo-content" layout="row" layout-wrap layout-margin layout-align="center">
+                <img ng-src="{{team.src}}" ng-click="showAlert($event,index,team)" class="imgCustom" alt="Loading..."  />
+            </div>
+            <br/>
+            <!-- Card Image Footer -->
+            <footer class="w3-container w3-green">
+                <h5>Batting Style:<strong>{{team.playerBattingStyle}}</strong></h5>
+                <h5>Bowling Style:<strong>{{team.playerBowlingStyle}}</strong></h5>
+                <h5>Player Role:<strong>{{team.playerRole}}</strong></h5>
+            </footer>
+
+        </div>
+    </div>
+</div>
