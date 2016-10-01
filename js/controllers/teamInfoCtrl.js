@@ -12,7 +12,6 @@ var app = angular.module("myApp")
         var ref = firebase.database().ref(teamName);
         ref.on("value", function(snapshot) {
             copyArray(snapshot.val());
-            console.log("call");
         });
 
         /*Copy the path and calling the URL path function to take Google Cloud

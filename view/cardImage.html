@@ -2,7 +2,6 @@
 <div class="col-lg-4 col-xs-12 col-sm-6 col-md-4">
     <div class="w3-card-4" style="width:auto; margin:10px; height:auto">
         <div class="w3-container md-padding" align="center" id="a{{index}}" ng-cloak>
-
             <!-- Card Hear infomation -->
             <header class="w3-container w3-green">
                 <center>
@@ -10,7 +9,7 @@
             </header>
             <!-- Modal Alert display div and image display-->
             <div class="dialog-demo-content" layout="row" layout-wrap layout-margin layout-align="center">
-                <img ng-src="{{team.src}}" ng-click="showAlert($event,index,team)" class="imgCustom" alt="Loading..."  />
+                <img ng-cache ng-src="{{team.src}}" ng-click="showAlert($event,index,team)" class="imgCustom" alt="Loading..." />
             </div>
             <br/>
             <!-- Card Image Footer -->
