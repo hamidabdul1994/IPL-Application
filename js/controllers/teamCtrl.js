@@ -5,7 +5,7 @@ Purpose:To Control the team data
 */
 
 angular.module("myApp")
-    .controller("teamNameCtrl", function($scope, $firebase, teamCache) {
+    .controller("teamNameCtrl", function($scope, $firebase, teamCache,teamSevice) {
 
         /* SLIDES WITH CAPTIONS
         slides object contain two properties which is use to display
@@ -19,23 +19,7 @@ angular.module("myApp")
         /*Option Object for Setting the carousel-3d screen
         options object have several properties which helps to display carousel
         */
-        $scope.options = {
-            sourceProp: 'src',
-            visible: 5,
-            perspective: 35,
-            startSlide: 0,
-            border: 1,
-            // dir: 'ltr',
-            width: 360,
-            height: 370,
-            //space: 300,
-            clicking: true,
-            //animationSpeed:1000,
-            autoRotationSpeed: 30000,
-            //inverseScaling:1000
-            loop: true
-                //controls:true
-        };
+        $scope.options = teamSevice.options;
 
         var myTeamCache = teamCache.get("teamInfo");
         if (myTeamCache) {
@@ -43,58 +27,22 @@ angular.module("myApp")
           $scope.slides=myTeamCache;
         } else {
           console.log("Not Cached");
-          firebaseCall();
+          teamSevice.firebaseCall("team_info",function(database){
+            $scope.slides=[];
+            angular.forEach(database,function(value,key){
+              teamSevice.getMyImage(value,"team_img_url", function(url, obj) {
+                  $scope.slides.push({
+                      'src': url,
+                      'caption': obj.team_name,
+                      'url': obj.team_name.replace(/\s+/g, '')
+                  });
+              });
+            })
+          });
         }
         $scope.$watch("slides",function(newSlides,oldSlides){
           teamCache.put("teamInfo",newSlides);
         });
-
-        /*Refference to take data from Firebase Database*/
-        function firebaseCall(){
-          var ref = firebase.database().ref();
-          ref.on("value", function(snapshot) {
-              copyArray(snapshot.val().team_info);
-          }, function(error) {
-              console.log("Error: " + error.code);
-          });
-        }
-
-
-        /*Copy the path and calling the URL path function to take Google Cloud
-        *************function copyArray *****************
-        take imageLoc is parameter which hold object properties
-        like image url and caption
-        */
-        function copyArray(imageLoc) {
-            $scope.slides = []; //Clearing $scope.slides variable
-            for (i in imageLoc) {
-                /**/
-                getMyImage(imageLoc[i].team_img_url, imageLoc[i].team_name, function(url, caption) {
-                    $scope.slides.push({
-                        'src': url,
-                        'caption': caption,
-                        'url': caption.replace(/\s+/g, '')
-                    });
-                });
-            }
-        }
-        /* copyArray method end*/
-
-
-        /*************function getMyImage takes three parameter****************
-        path=name of image, caption, callback for return the values to previous caller
-        Get image url from google cloud give back to previous caller method
-        */
-        function getMyImage(path, caption, callback) {
-
-            var storageRef = firebase.storage().ref();
-            storageRef.child(path).getDownloadURL().then(function(url) {
-                callback(url, caption);
-            }).catch(function(error) {
-                // Handle any errors
-            });
-        }
-        /*getMyImage Method End*/
 
         /*Controller end*/
     });
