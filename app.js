@@ -4,20 +4,23 @@ date:21/09/2016
 Purpose:Model of IPL Application and give the different states
 */
 
-angular.module("myApp", ["firebase", "angular-carousel-3d", "ui.router", "ngMaterial", "ngImgCache", "angular-cache"])
-    .config(function($stateProvider, $urlRouterProvider,CacheFactoryProvider) {
+angular.module("myApp", ["firebase", "angular-carousel-3d", "ui.router", "ngMaterial", "ngImageCache"])
+    .config(function($stateProvider, $urlRouterProvider,$sceDelegateProvider,ImageCacheProvider,$httpProvider) {
 
-        /*Setting the Lifetime of cache*/
-        angular.extend(CacheFactoryProvider.defaults, {
-            maxAge: 15 * 60 * 1000
-        });
-        var teamCache;
+      //Make Access from all Scheme eg.http,https etc
+      $httpProvider.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
-        /* Check to make sure the cache doesn't already exist*/
-        // if (!CacheFactory.get('teamCache')) {
-        //     teamCache = CacheFactory('teamCache');
-        // }
-        console.log(teamCache);
+    // Use localStorage instead of sessionStorage
+        ImageCacheProvider.setStorage(window.localStorage)
+
+        /*It set my Firebase Database Whitelisted*/
+        $sceDelegateProvider.resourceUrlWhitelist([
+    // Allow same origin resource loads.
+    'self',
+    // Allow loading from our assets domain.  Notice the difference between * and **.
+    'https://firebasestorage.googleapis.com/v0/b/ipl-project-aa084.appspot.com/**'
+  ]);
+
 
         $urlRouterProvider.otherwise('/home');
 

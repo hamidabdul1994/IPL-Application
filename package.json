@@ -22,7 +22,9 @@
     "angular-ui-router": "^0.3.1",
     "angularfire": "^2.0.2",
     "bootstrap": "^3.3.7",
+    "cachefactory": "^2.0.0",
     "firebase": "^3.4.1",
-    "imgcache.js": "^1.0.0"
+    "imgcache.js": "^1.0.0",
+    "ng-image-cache": "^0.2.0"
   }
 }

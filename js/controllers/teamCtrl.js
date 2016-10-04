@@ -5,7 +5,7 @@ Purpose:To Control the team data
 */
 
 angular.module("myApp")
-    .controller("teamNameCtrl", function($scope, $firebase) {
+    .controller("teamNameCtrl", function($scope, $firebase, teamCache) {
 
         /* SLIDES WITH CAPTIONS
         slides object contain two properties which is use to display
@@ -34,16 +34,31 @@ angular.module("myApp")
             autoRotationSpeed: 30000,
             //inverseScaling:1000
             loop: true
-            //controls:true
+                //controls:true
         };
 
-        /*Refference to take data from Firebase Database*/
-        var ref = firebase.database().ref();
-        ref.on("value", function(snapshot) {
-            copyArray(snapshot.val().team_info);
-        }, function(error) {
-            console.log("Error: " + error.code);
+        var myTeamCache = teamCache.get("teamInfo");
+        if (myTeamCache) {
+          console.log("cached");
+          $scope.slides=myTeamCache;
+        } else {
+          console.log("Not Cached");
+          firebaseCall();
+        }
+        $scope.$watch("slides",function(newSlides,oldSlides){
+          teamCache.put("teamInfo",newSlides);
         });
+
+        /*Refference to take data from Firebase Database*/
+        function firebaseCall(){
+          var ref = firebase.database().ref();
+          ref.on("value", function(snapshot) {
+              copyArray(snapshot.val().team_info);
+          }, function(error) {
+              console.log("Error: " + error.code);
+          });
+        }
+
 
         /*Copy the path and calling the URL path function to take Google Cloud
         *************function copyArray *****************
@@ -53,7 +68,7 @@ angular.module("myApp")
         function copyArray(imageLoc) {
             $scope.slides = []; //Clearing $scope.slides variable
             for (i in imageLoc) {
-              /**/
+                /**/
                 getMyImage(imageLoc[i].team_img_url, imageLoc[i].team_name, function(url, caption) {
                     $scope.slides.push({
                         'src': url,

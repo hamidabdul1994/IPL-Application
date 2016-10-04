@@ -4,16 +4,28 @@ date:25/09/2016
 Purpose:To Control the Team Infomation data
 */
 var app = angular.module("myApp")
-    .controller("teamInfoCtrl", function($scope, $firebase, $stateParams, $timeout, $mdDialog) {
-
+    .controller("teamInfoCtrl", function($scope, $firebase, $stateParams, $timeout, $mdDialog,teamCache) {
+      console.log("Controller call");
+        var i=0;
         var teamName = $stateParams.teamname;
+        var myTeamCache = teamCache.get(teamName);
+        cacheFunction(teamName,myTeamCache,i++);
 
-        /*Refference to take data from Firebase Database*/
-        var ref = firebase.database().ref(teamName);
-        ref.on("value", function(snapshot) {
-            copyArray(snapshot.val());
+        $scope.$watch("teamDetails",function(newTeam,oldTeam){
+          teamCache.put(teamName,newTeam);
         });
 
+        function cacheFunction(teamName,myTeamCache,i){
+          console.log("i:"+i);
+          if (myTeamCache) {
+            console.log("Team cached");
+            $scope.teamDetails=myTeamCache;
+          } else {
+            console.log("Team Not-Cached");
+            firebaseCall(teamName);
+          }
+          i++;
+        }
         /*Copy the path and calling the URL path function to take Google Cloud
         *************function copyArray *****************
         take teamValue is parameter which hold object properties
@@ -36,6 +48,15 @@ var app = angular.module("myApp")
                 }); /*Closing The getMyImage Method callback method*/
             }); /*Closing The ForEAch Method*/
         } /*copyArray Method End*/
+
+function firebaseCall(teamName){
+        /*Refference to take data from Firebase Database*/
+        var ref = firebase.database().ref(teamName);
+        ref.on("value", function(snapshot) {
+          console.log(snapshot.val());
+            copyArray(snapshot.val());
+        });
+}
 
 
         /*************function getMyImage takes three parameter****************
