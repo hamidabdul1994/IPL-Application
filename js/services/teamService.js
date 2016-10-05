@@ -3,6 +3,7 @@ Created By:Hamid Raza Noori
 date:25/09/2016
 Purpose:To Control the Team Infomation data
 */
+
 angular.module("myApp")
 .factory("teamSevice",function(){
   var service = {};
