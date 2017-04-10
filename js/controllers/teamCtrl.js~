@@ -7,7 +7,7 @@ Purpose:To Control the team data
 angular.module("myApp")
     .controller("teamNameCtrl", function($scope, $firebase, teamCache,teamSevice,$http) {
 
-	$http.get("http://localhost:3000/readEmployeeMonthlyAttendance?token=bdadfhsag");
+	$http.get("http://localhost:3000/readEmployeeMonthlyAttendance?token='bdadfhsag'");
         /* SLIDES WITH CAPTIONS
         slides object contain two properties which is use to display
         slide and caption on view page
